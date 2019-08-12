@@ -1,6 +1,6 @@
 bin/
 pkg/
-src/journals/
+/src/app/journals/
 src/github.com/
 src/golang.org/
 src/greet/

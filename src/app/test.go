@@ -32,7 +32,7 @@ var currentTime = time.Now()
 var fileName = currentTime.Format("2006-01-02")
 var layout = "2016-01-02 15:04:05"
 var timeStampStr = currentTime.Format(layout)
-var path, err = filepath.Abs("./journals/" + fileName + ".md")
+var path, err = filepath.Abs("code/go-journal/src/app/journals/" + fileName + ".md")
 var fileTile = currentTime.Format("2006-01-02 Mon")
 var content []string
 
