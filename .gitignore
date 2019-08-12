@@ -1,6 +1,6 @@
-/bin
-/pkg
-/src/journals
-/src/github.com
-/src/golang.org
-/src/greet
+./bin/
+./pkg/
+./src/journals/
+./src/github.com/
+./src/golang.org/
+./src/greet/
