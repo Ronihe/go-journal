@@ -5,6 +5,7 @@ import (
 	"io"
 	"log"
 	"os"
+	"path/filepath"
 	"strconv"
 	"time"
 
@@ -13,7 +14,7 @@ import (
 )
 
 func init() {
-	fmt.Println(" 😸\n")
+	fmt.Println(" 😎  😎  😎  \n")
 }
 
 var app = cli.NewApp()
@@ -27,10 +28,12 @@ func info() {
 	app.Version = "1.0.0"
 }
 
-var currentDate = time.Now()
-var fileName = currentDate.Format("2006-01-02")
-var path = "./journals/" + fileName + ".md"
-var fileTile = currentDate.Format("2006-01-02 Mon")
+var currentTime = time.Now()
+var fileName = currentTime.Format("2006-01-02")
+var layout = "2016-01-02 15:04:05"
+var timeStampStr = currentTime.Format(layout)
+var path, err = filepath.Abs("./journals/" + fileName + ".md")
+var fileTile = currentTime.Format("2006-01-02 Mon")
 var content []string
 
 func commands() {
@@ -43,8 +46,8 @@ func commands() {
 
 				shouldWrite := startJournal()
 				if shouldWrite {
-					fmt.Println("Hey, How was your day? Tell me everything!")
-					fmt.Println("what did you finish today? use t 'blah blah' to let me know")
+					fmt.Println("Hey, How was your day? Tell me everything!\n")
+					fmt.Println("what did you finish today? use t 'blah blah' to let me know\n")
 					writeJournal(content)
 				}
 
@@ -53,10 +56,18 @@ func commands() {
 		{
 			Name:    "task",
 			Aliases: []string{"t"},
-			Usage:   "task and how did you finish, how do you feel",
+			Usage:   "task and how did you finish, how do you feel\n",
 			Action: func(c *cli.Context) {
 				fmt.Println("what else did you do? I want to know everything!\n")
-				achieved := c.Args().First()
+				timeStamp, err := time.Parse(layout, timeStampStr)
+				if err != nil {
+					return
+				}
+				hr, min, sec := timeStamp.Clock()
+				hrStr := strconv.Itoa(hr)
+				minStr := strconv.Itoa(min)
+				secStr := strconv.Itoa(sec)
+				achieved := hrStr + ":" + minStr + ":" + secStr + ": " + c.Args().First()
 				content = append(content, achieved)
 				writeJournal(content)
 
@@ -67,7 +78,7 @@ func commands() {
 			Aliases: []string{"d"},
 			Usage:   "write to the file",
 			Action: func(c *cli.Context) {
-				fmt.Println("Thanks for telling me everything!")
+				fmt.Println("Thanks for telling me everything!\n")
 				readJournal()
 
 			},
@@ -94,12 +105,12 @@ func startJournal() bool {
 
 		defer file.Close()
 	} else {
-		fmt.Println("already created! Please go ahead and write your journal")
+		fmt.Println("😜  already created! Please go ahead and write your journal\n")
 		return false
 	}
 	content = append(content, fileTile)
 
-	fmt.Println("==>  created your  journal ", path)
+	fmt.Println(" 😎  ==>  created your  journal ", path)
 	return true
 
 }
@@ -163,7 +174,7 @@ func readJournal() {
 		}
 	}
 
-	fmt.Println("==> done reading from file")
+	fmt.Println(" 😎  ==> This is your journal today\n")
 	fmt.Println(string(text))
 }
 
