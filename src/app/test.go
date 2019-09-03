@@ -7,6 +7,7 @@ import (
 	"os"
 	"path/filepath"
 	"strconv"
+	"strings"
 	"time"
 
 	//3rd party lib
@@ -59,15 +60,8 @@ func commands() {
 			Usage:   "task and how did you finish, how do you feel\n",
 			Action: func(c *cli.Context) {
 				fmt.Println("what else did you do? I want to know everything!\n")
-				timeStamp, err := time.Parse(layout, timeStampStr)
-				if err != nil {
-					return
-				}
-				hr, min, sec := timeStamp.Clock()
-				hrStr := strconv.Itoa(hr)
-				minStr := strconv.Itoa(min)
-				secStr := strconv.Itoa(sec)
-				achieved := hrStr + ":" + minStr + ":" + secStr + ": " + c.Args().First()
+				achieved := strings.Fields(timeStampStr)[1] + " " + c.Args().First()
+
 				content = append(content, achieved)
 				writeJournal(content)
 
@@ -121,6 +115,7 @@ func writeJournal(content []string) {
 	// open your journal using READ & WRITE permission
 	var file, err = os.OpenFile(path, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if isError(err) {
+		fmt.Println(err)
 		return
 	}
 	defer file.Close()
@@ -174,7 +169,7 @@ func readJournal() {
 		}
 	}
 
-	fmt.Println(" 😎  ==> This is your journal today\n")
+	fmt.Println(" 😎  ==> This is your journal today\n", path)
 	fmt.Println(string(text))
 }
 
